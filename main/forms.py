@@ -25,6 +25,8 @@ class EmailAuthenticationForm(forms.Form):
         self.request = request
         self.user_cache = None
         super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
     def clean(self):
         email = self.cleaned_data.get('email')

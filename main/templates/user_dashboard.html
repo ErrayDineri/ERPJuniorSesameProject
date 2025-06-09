@@ -1,29 +1,62 @@
 {% extends "base.html" %}
 {% block title %}My Dashboard{% endblock %}
+
 {% block content %}
-<h2>Welcome, {{ user.username }}</h2>
-<h3>Your Absences</h3>
-<ul>
-    {% for a in absences %}
-    <li>{{ a.date_debut }} – {{ a.date_fin }}: {{ a.motif }}</li>
-    {% empty %}
-    <li>No absences recorded.</li>
-    {% endfor %}
-</ul>
-<h3>Your Formations</h3>
-<ul>
-    {% for f in formations %}
-    <li>{{ f.intitule }} ({{ f.organisme }})</li>
-    {% empty %}
-    <li>No trainings recorded.</li>
-    {% endfor %}
-</ul>
-<h3>Your Performances</h3>
-<ul>
-    {% for p in performances %}
-    <li>{{ p.date_evaluation }}: {{ p.note }} / Comment: {{ p.commentaires }}</li>
-    {% empty %}
-    <li>No evaluations recorded.</li>
-    {% endfor %}
-</ul>
+<div class="d-flex justify-content-center">
+    <div class="w-100" style="max-width: 600px;">
+
+        <div class="text-center mb-4">
+            <h2>Welcome, <span class="text-primary">{{ user.username }}</span></h2>
+        </div>
+
+        <!-- Absences -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Your Absences</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    {% for a in absences %}
+                        <li>{{ a.date_debut }} – {{ a.date_fin }}: {{ a.motif }}</li>
+                    {% empty %}
+                        <li>No absences recorded.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Formations -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Your Formations</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    {% for f in formations %}
+                        <li>{{ f.intitule }} ({{ f.organisme }})</li>
+                    {% empty %}
+                        <li>No trainings recorded.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Performances -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Your Performances</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    {% for p in performances %}
+                        <li>{{ p.date_evaluation }}: {{ p.note }} / Comment: {{ p.commentaires }}</li>
+                    {% empty %}
+                        <li>No evaluations recorded.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}
