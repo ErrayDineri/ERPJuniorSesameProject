@@ -1,34 +1,76 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
-{% block content %}
-<main class="container my-5 d-flex justify-content-center align-items-center">
-    <div class="card shadow p-4" style="width: 100%; max-width: 400px; border-radius: 1rem;">
-        <h3 class="text-center mb-4">Login with your email</h3>
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-                {{ form.non_field_errors }}
+{% block title %}Login - HR Portal{% endblock %}
+{% block auth_content %}
+<div class="auth-container">
+    <div class="auth-gradient">
+        <h1 class="display-4 fw-bold">HR Portal</h1>
+        <p class="lead mt-4">Manage employee absences, training programs, and performance evaluations in one centralized platform.</p>
+        <div class="mt-5">
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-white rounded-circle p-2 me-3">
+                    <i class="fas fa-calendar-check text-primary"></i>
+                </div>
+                <span>Track absences and time off requests</span>
             </div>
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="id_email" class="form-label">Email</label>
-                <input type="email" name="email" autofocus maxlength="254" class="form-control{% if form.email.errors %} is-invalid{% endif %}" required id="id_email" value="{{ form.email.value|default_if_none:'' }}">
-                {% for error in form.email.errors %}
-                    <div class="invalid-feedback d-block">{{ error }}</div>
-                {% endfor %}
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-white rounded-circle p-2 me-3">
+                    <i class="fas fa-chart-line text-primary"></i>
+                </div>
+                <span>Monitor employee performance metrics</span>
             </div>
-            <div class="mb-3">
-                <label for="id_password" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control{% if form.password.errors %} is-invalid{% endif %}" required id="id_password">
-                {% for error in form.password.errors %}
-                    <div class="invalid-feedback d-block">{{ error }}</div>
-                {% endfor %}
+            <div class="d-flex align-items-center">
+                <div class="bg-white rounded-circle p-2 me-3">
+                    <i class="fas fa-graduation-cap text-primary"></i>
+                </div>
+                <span>Manage training and development programs</span>
             </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
-        </form>
+        </div>
     </div>
-</main>
+    <div class="auth-form">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h3>Login to your account</h3>
+                <p class="mb-0">Enter your credentials to continue</p>
+            </div>
+            <div class="card-body p-4">
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email Address</label>
+                        <input type="email" name="email" autofocus maxlength="254" 
+                               class="form-control{% if form.email.errors %} is-invalid{% endif %}" 
+                               required id="id_email" value="{{ form.email.value|default_if_none:'' }}"
+                               placeholder="you@company.com">
+                        {% for error in form.email.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Password</label>
+                        <input type="password" name="password" 
+                               class="form-control{% if form.password.errors %} is-invalid{% endif %}" 
+                               required id="id_password" placeholder="••••••••">
+                        {% for error in form.password.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                        <div class="text-end mt-2">
+                            <a href="#" class="text-decoration-none small text-muted">Forgot password?</a>
+                        </div>
+                    </div>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    </div>
+                    <div class="text-center mt-4">
+                        <p class="text-muted">Don't have an account? <a href="{% url 'signup' %}" class="text-decoration-none">Sign up</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
