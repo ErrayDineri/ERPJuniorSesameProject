@@ -196,7 +196,7 @@
         </div>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
                     <i class="fas fa-home"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
@@ -226,11 +226,18 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {% if request.path == '/competences/' %}active{% endif %}" href="/competences/">
+                    <i class="fas fa-lightbulb"></i>
+                    <span class="nav-text">Compétences</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="fas fa-cog"></i>
                     <span class="nav-text">Settings</span>
                 </a>
-            </li>            <li class="nav-item mt-4">
+            </li>
+            <li class="nav-item mt-4">
                 <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="nav-link border-0 bg-transparent w-100">

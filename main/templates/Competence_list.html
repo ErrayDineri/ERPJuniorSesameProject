@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1>Ajouter une compétence</h1>
+        </div>
+        <div class="card-body">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="competence" class="form-label">Compétence :</label>
+                    <input type="text" id="competence" name="competence" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="categorie" class="form-label">Type :</label>
+                    <select id="categorie" name="categorie" class="form-control" required>
+                        <option value="Hard">Hard Skill</option>
+                        <option value="Soft">Soft Skill</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+            </form>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>Hard Skills</h2>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for comp in hard_skills %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <form method="post" action="?edit={{ comp.id }}" class="d-inline-flex align-items-center" style="width:100%;">
+                            {% csrf_token %}
+                            {% if edit_id == comp.id %}
+                                <input type="text" name="new_libelle" value="{{ comp.libelle }}" class="form-control form-control-sm me-2" style="max-width:200px;display:inline-block;">
+                                <button type="submit" class="btn btn-success btn-sm me-1" title="Enregistrer">✔</button>
+                                <a href="?cancel=1" class="btn btn-secondary btn-sm" title="Annuler">✖</a>
+                            {% else %}
+                                <span>{{ comp.libelle }}</span>
+                                <button type="submit" formaction="?edit={{ comp.id }}" formmethod="post" name="edit_btn" value="1" class="btn btn-outline-secondary btn-sm ms-2" title="Modifier">✎</button>
+                            {% endif %}
+                        </form>
+                        <form method="post" action="?delete={{ comp.id }}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm ms-1" title="Supprimer" style="padding:0 7px;">×</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item"><span class="text-muted">Aucune compétence</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>Soft Skills</h2>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for comp in soft_skills %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <form method="post" action="?edit={{ comp.id }}" class="d-inline-flex align-items-center" style="width:100%;">
+                            {% csrf_token %}
+                            {% if edit_id == comp.id %}
+                                <input type="text" name="new_libelle" value="{{ comp.libelle }}" class="form-control form-control-sm me-2" style="max-width:200px;display:inline-block;">
+                                <button type="submit" class="btn btn-success btn-sm me-1" title="Enregistrer">✔</button>
+                                <a href="?cancel=1" class="btn btn-secondary btn-sm" title="Annuler">✖</a>
+                            {% else %}
+                                <span>{{ comp.libelle }}</span>
+                                <button type="submit" formaction="?edit={{ comp.id }}" formmethod="post" name="edit_btn" value="1" class="btn btn-outline-secondary btn-sm ms-2" title="Modifier">✎</button>
+                            {% endif %}
+                        </form>
+                        <form method="post" action="?delete={{ comp.id }}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm ms-1" title="Supprimer" style="padding:0 7px;">×</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item"><span class="text-muted">Aucune compétence</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

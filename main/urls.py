@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import custom_login_view, signup_view, dashboard_view, logout_view
+from .views import custom_login_view, signup_view, dashboard_view, logout_view, competence_list_view
 from django.urls import reverse_lazy
 
 urlpatterns = [
@@ -7,4 +7,5 @@ urlpatterns = [
     path('login/', custom_login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('', dashboard_view, name='dashboard'),
+    path('competences/', competence_list_view, name='competence_list'),
 ]
