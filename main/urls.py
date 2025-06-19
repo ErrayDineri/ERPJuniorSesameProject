@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import custom_login_view, signup_view, dashboard_view, logout_view, competence_list_view
+from .views import exclusion_list_view  # Import the new view
 from django.urls import reverse_lazy
 
 urlpatterns = [
@@ -8,4 +9,5 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('', dashboard_view, name='dashboard'),
     path('competences/', competence_list_view, name='competence_list'),
+    path('exclusions/', exclusion_list_view, name='exclusion_list'),  # Add exclusions URL
 ]

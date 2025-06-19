@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from datetime import date
 
 from .forms import CustomUserCreationForm, EmailAuthenticationForm
-from .models import CustomUser, Absence, Formation, Performance, Competence
+from .models import CustomUser, Absence, Formation, Performance, Competence, ExclusionDemission
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_exempt
 
@@ -100,3 +101,50 @@ def competence_list_view(request):
         'soft_skills': soft_skills,
         'edit_id': edit_id
     })
+
+@login_required
+def exclusion_list_view(request):
+    from .models import CustomUser
+    exclusions = ExclusionDemission.objects.all()
+    members = CustomUser.objects.all()
+    today = date.today()
+    # Handle delete
+    if request.method == 'POST' and 'delete_id' in request.POST:
+        delete_id = request.POST.get('delete_id')
+        ExclusionDemission.objects.filter(id=delete_id).delete()
+        return redirect('exclusion_list')
+    # Handle edit
+    if request.method == 'POST' and 'edit_id' in request.POST:
+        edit_id = request.POST.get('edit_id')
+        exclusion = ExclusionDemission.objects.get(id=edit_id)
+        membre_id = request.POST.get('membre')
+        motif = request.POST.get('motif')
+        type_ = request.POST.get('type')
+        date_effet = request.POST.get('date_effet')
+        document_reference = request.POST.get('document_reference')
+        if membre_id and motif and type_ and date_effet:
+            exclusion.membre = CustomUser.objects.get(id=membre_id)
+            exclusion.motif = motif
+            exclusion.type = type_
+            exclusion.date_effet = date_effet
+            exclusion.document_reference = document_reference or ''
+            exclusion.save()
+        return redirect('exclusion_list')
+    # Handle add
+    if request.method == 'POST' and 'membre' in request.POST and 'edit_id' not in request.POST:
+        membre_id = request.POST.get('membre')
+        motif = request.POST.get('motif')
+        type_ = request.POST.get('type')
+        date_effet = request.POST.get('date_effet')
+        document_reference = request.POST.get('document_reference')
+        if membre_id and motif and type_ and date_effet:
+            membre = CustomUser.objects.get(id=membre_id)
+            ExclusionDemission.objects.create(
+                membre=membre,
+                motif=motif,
+                type=type_,
+                date_effet=date_effet,
+                document_reference=document_reference or ''
+            )
+        return redirect('exclusion_list')
+    return render(request, 'Exclusion_list.html', {'exclusions': exclusions, 'members': members, 'today': today})
