@@ -9,5 +9,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('', dashboard_view, name='dashboard'),
     path('competences/', competence_list_view, name='competence_list'),
-    path('exclusions/', exclusion_list_view, name='exclusion_list'),  # Add exclusions URL
+    path('exclusions/', exclusion_list_view, name='exclusion_list'), 
+    path('formation/', exclusion_list_view, name='formations'),
+    path('abscence/', exclusion_list_view, name='abscence'),# Add exclusions URL
 ]
