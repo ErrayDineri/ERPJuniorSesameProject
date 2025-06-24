@@ -239,13 +239,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link {% if request.path == '/abscence/' %}active{% endif %}" href="{% url 'abscence' %}">
                     <i class="fas fa-calendar-times"></i>
                     <span class="nav-text">Absences</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link {% if request.path == '/formation/' %}active{% endif %}" href="{% url 'formations' %}">
                     <i class="fas fa-graduation-cap"></i>
                     <span class="nav-text">Formations</span>
                 </a>

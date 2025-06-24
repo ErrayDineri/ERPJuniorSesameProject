@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Formations{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Mes Formations</h2>
+    {% if formations %}
+        <ul class="list-group">
+            {% for formation in formations %}
+                <li class="list-group-item">
+                    <strong>{{ formation.intitule }}</strong><br>
+                    Organisme: {{ formation.organisme }}<br>
+                    Date début: {{ formation.date_debut }}<br>
+                    Date fin: {{ formation.date_fin }}<br>
+                    Certification: {{ formation.certification|yesno:"Oui,Non" }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune formation trouvée.</p>
+    {% endif %}
+</div>
+{% endblock %}

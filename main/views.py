@@ -148,3 +148,13 @@ def exclusion_list_view(request):
             )
         return redirect('exclusion_list')
     return render(request, 'Exclusion_list.html', {'exclusions': exclusions, 'members': members, 'today': today})
+
+@login_required
+def formation_list_view(request):
+    formations = Formation.objects.filter(membre=request.user)
+    return render(request, 'formations.html', {'formations': formations})
+
+@login_required
+def abscence_list_view(request):
+    absences = Absence.objects.filter(membre=request.user)
+    return render(request, 'abscence.html', {'absences': absences})

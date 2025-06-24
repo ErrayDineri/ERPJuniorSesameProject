@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Mes Absences{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Mes Absences</h2>
+    {% if absences %}
+        <ul class="list-group">
+            {% for a in absences %}
+                <li class="list-group-item">
+                    <strong>{{ a.motif }}</strong><br>
+                    Date début: {{ a.date_debut }}<br>
+                    Date fin: {{ a.date_fin }}<br>
+                    Statut: <span class="badge bg-success">Approuvée</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune absence trouvée.</p>
+    {% endif %}
+</div>
+{% endblock %}
