@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 {% block title %}My Dashboard - HR Portal{% endblock %}
 
 {% block content %}
@@ -23,7 +24,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="text-uppercase text-muted small">Absences</h6>
-                        <h3 class="mb-0">2</h3>
+                        <h3 class="mb-0">{{ absence_count }}</h3>
                     </div>
                     <div class="bg-gradient-primary text-white p-3 rounded-circle">
                         <i class="fas fa-calendar-times fa-lg"></i>
@@ -31,9 +32,12 @@
                 </div>
                 <div class="mt-3">
                     <div class="progress" style="height: 8px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 65%"></div>
+                        <div class="progress-bar bg-primary" role="progressbar" data-progress="{{ absence_percentage }}" aria-valuenow="{{ absence_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <p class="small text-muted mt-2 mb-0"><i class="fas fa-check-circle text-success me-1"></i> All requests approved</p>
+                    <p class="small text-muted mt-2 mb-0">
+                        <i class="fas fa-check-circle text-success me-1"></i> 
+                        {{ absence_approved }} requests approved
+                    </p>
                 </div>
             </div>
         </div>
@@ -45,7 +49,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="text-uppercase text-muted small">Trainings</h6>
-                        <h3 class="mb-0">3</h3>
+                        <h3 class="mb-0">{{ formation_count }}</h3>
                     </div>
                     <div class="bg-gradient-primary text-white p-3 rounded-circle">
                         <i class="fas fa-graduation-cap fa-lg"></i>
@@ -53,9 +57,12 @@
                 </div>
                 <div class="mt-3">
                     <div class="progress" style="height: 8px;">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 40%"></div>
+                        <div class="progress-bar bg-info" role="progressbar" data-progress="{{ formation_percentage }}" aria-valuenow="{{ formation_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <p class="small text-muted mt-2 mb-0"><i class="fas fa-sync-alt text-warning me-1"></i> 1 training pending</p>
+                    <p class="small text-muted mt-2 mb-0">
+                        <i class="fas fa-sync-alt text-warning me-1"></i> 
+                        {{ active_formations }} active training{% if active_formations != 1 %}s{% endif %}
+                    </p>
                 </div>
             </div>
         </div>
@@ -67,7 +74,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="text-uppercase text-muted small">Performance</h6>
-                        <h3 class="mb-0">8.6/10</h3>
+                        <h3 class="mb-0">{{ performance_score }}/10</h3>
                     </div>
                     <div class="bg-gradient-primary text-white p-3 rounded-circle">
                         <i class="fas fa-chart-line fa-lg"></i>
@@ -75,14 +82,31 @@
                 </div>
                 <div class="mt-3">
                     <div class="progress" style="height: 8px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 86%"></div>
+                        <div class="progress-bar bg-success" role="progressbar" data-progress="{{ performance_score|multiply:10 }}" aria-valuenow="{{ performance_score|multiply:10 }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <p class="small text-muted mt-2 mb-0"><i class="fas fa-arrow-up text-success me-1"></i> 12% improvement</p>
+                    <p class="small text-muted mt-2 mb-0">
+                        {% if performance_trend > 0 %}
+                            <i class="fas fa-arrow-up text-success me-1"></i> {{ performance_trend }}% improvement
+                        {% elif performance_trend < 0 %}
+                            <i class="fas fa-arrow-down text-danger me-1"></i> {{ performance_trend|abs }}% decline
+                        {% else %}
+                            <i class="fas fa-minus text-muted me-1"></i> No change
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.progress-bar').forEach(function(bar) {
+        const progress = bar.dataset.progress;
+        bar.style.width = progress + '%';
+    });
+});
+</script>
 
 <div class="row">
     <!-- Absences -->
@@ -129,15 +153,6 @@
                                 <h6 class="mb-0">{{ f.intitule }}</h6>
                                 <small class="text-muted">{{ f.organisme }}</small>
                             </div>
-                            <div>
-                                <span class="badge bg-info">In Progress</span>
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <div class="progress" style="height: 6px;">
-                                <div class="progress-bar" role="progressbar" style="width: 65%"></div>
-                            </div>
-                            <small class="text-muted">65% completed</small>
                         </div>
                     </li>
                     {% empty %}

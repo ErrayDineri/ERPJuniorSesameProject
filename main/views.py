@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from datetime import date
+from django.db import models
 
 from .forms import CustomUserCreationForm, EmailAuthenticationForm
 from .models import CustomUser, Absence, Formation, Performance, Competence, ExclusionDemission
@@ -44,13 +45,45 @@ def dashboard_view(request):
         membres = CustomUser.objects.all()
         return render(request, 'admin_dashboard.html', {'membres': membres})
     else:
-        absences     = Absence.objects.filter(membre=request.user)
-        formations   = Formation.objects.filter(membre=request.user)
+        # Get all user's records
+        absences = Absence.objects.filter(membre=request.user)
+        formations = Formation.objects.filter(membre=request.user)
         performances = Performance.objects.filter(membre=request.user)
+        
+        # Calculate dashboard statistics
+        today = date.today()
+        
+        # Absences stats
+        total_absences = absences.count()
+        approved_absences = absences.filter(certificat_medical=True).count()
+        absence_percentage = (approved_absences / total_absences * 100) if total_absences > 0 else 0
+        
+        # Formation stats
+        total_formations = formations.count()
+        active_formations = formations.filter(date_fin__gte=today).count()
+        formation_percentage = (active_formations / total_formations * 100) if total_formations > 0 else 0
+        
+        # Performance stats
+        latest_performance = performances.order_by('-date_evaluation').first()
+        avg_performance = performances.aggregate(avg=models.Avg('note'))['avg'] or 0
+        if latest_performance and latest_performance.note:
+            perf_trend = latest_performance.note - avg_performance
+        else:
+            perf_trend = 0
+            
         return render(request, 'user_dashboard.html', {
             'absences': absences,
             'formations': formations,
             'performances': performances,
+            # Dashboard card stats
+            'absence_count': total_absences,
+            'absence_approved': approved_absences,
+            'absence_percentage': int(absence_percentage),
+            'formation_count': total_formations,
+            'active_formations': active_formations,
+            'formation_percentage': int(formation_percentage),
+            'performance_score': round(avg_performance, 1) if avg_performance else 0,
+            'performance_trend': round(perf_trend * 100, 1) if perf_trend else 0
         })
 
 def logout_view(request):
