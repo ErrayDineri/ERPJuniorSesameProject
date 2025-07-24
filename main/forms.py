@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import gettext_lazy as _
 
@@ -48,3 +49,12 @@ class EmailAuthenticationForm(forms.Form):
 
     def get_user(self):
         return self.user_cache
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email', 'telephone', 'adresse_postale', 'date_adhesion']
+        widgets = {
+            'date_adhesion': forms.DateInput(attrs={'type': 'date'}),
+            'adresse_postale': forms.Textarea(attrs={'rows': 3}),
+        }

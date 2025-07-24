@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}My Profile | HR Portal{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2 class="mb-0">👤 My Profile</h2>
+    <p class="text-muted">Manage and update your account information.</p>
+</div>
+
+<div class="card p-4">
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">First Name</label>
+                {{ form.first_name|add_class:"form-control" }}
+                {% if form.first_name.errors %}
+                    <small class="text-danger">{{ form.first_name.errors|striptags }}</small>
+                {% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Last Name</label>
+                {{ form.last_name|add_class:"form-control" }}
+                {% if form.last_name.errors %}
+                    <small class="text-danger">{{ form.last_name.errors|striptags }}</small>
+                {% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Email</label>
+                {{ form.email|add_class:"form-control" }}
+                {% if form.email.errors %}
+                    <small class="text-danger">{{ form.email.errors|striptags }}</small>
+                {% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Phone</label>
+                {{ form.telephone|add_class:"form-control" }}
+                {% if form.telephone.errors %}
+                    <small class="text-danger">{{ form.telephone.errors|striptags }}</small>
+                {% endif %}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-label">Postal Address</label>
+                {{ form.adresse_postale|add_class:"form-control" }}
+                {% if form.adresse_postale.errors %}
+                    <small class="text-danger">{{ form.adresse_postale.errors|striptags }}</small>
+                {% endif %}
+            </div>
+            <div class="col-md-6 mb-4">
+                <label class="form-label">Date of Adhesion</label>
+                {{ form.date_adhesion|add_class:"form-control" }}
+                {% if form.date_adhesion.errors %}
+                    <small class="text-danger">{{ form.date_adhesion.errors|striptags }}</small>
+                {% endif %}
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary shadow-sm">
+                <i class="fas fa-save me-2"></i>Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -267,7 +267,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" {% if request.path == '/profile/' %}active{% endif %}" href="/profile/">
                     <i class="fas fa-user"></i>
                     <span class="nav-text">Profile</span>
                 </a>

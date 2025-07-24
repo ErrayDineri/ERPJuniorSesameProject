@@ -5,7 +5,8 @@ from django.contrib import messages
 from datetime import date
 from django.db import models
 
-from .forms import EmailAuthenticationForm
+
+from .forms import EmailAuthenticationForm,ProfileForm
 from .models import CustomUser, Absence, Formation, Performance, Competence, ExclusionDemission
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_exempt
@@ -179,3 +180,15 @@ def formation_list_view(request):
 def abscence_list_view(request):
     absences = Absence.objects.filter(membre=request.user)
     return render(request, 'abscence.html', {'absences': absences})
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=request.user)
+    return render(request, 'profile.html', {'form': form})
