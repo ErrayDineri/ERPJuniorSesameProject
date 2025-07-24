@@ -5,7 +5,7 @@ from django.contrib import messages
 from datetime import date
 from django.db import models
 
-from .forms import CustomUserCreationForm, EmailAuthenticationForm
+from .forms import EmailAuthenticationForm
 from .models import CustomUser, Absence, Formation, Performance, Competence, ExclusionDemission
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_exempt
@@ -23,18 +23,6 @@ def custom_login_view(request):
         form = EmailAuthenticationForm(request)
     return render(request, 'login.html', {'form': form})
 
-def signup_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            group, _ = Group.objects.get_or_create(name='Membre')
-            user.groups.add(group)
-            login(request, user)
-            return redirect('dashboard')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'signup.html', {'form': form})
 
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()

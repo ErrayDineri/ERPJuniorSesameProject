@@ -1,14 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
 
-class CustomUserCreationForm(UserCreationForm):
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'email', 'telephone', 'adresse_postale', 'date_adhesion']
 
 UserModel = get_user_model()
 
